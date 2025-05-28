@@ -7,7 +7,7 @@ Marketplace de matériel informatique full-stack (MongoDB, Express, React, Node.
 
 ```bash
 # Cloner le repo
-git clone https://github.com/<votre-compte>/mern-marketplace.git
+git clone https://github.com/AnisTrabelsi/mern-tech-marketplace.git
 cd mern-marketplace
 
 # Back-end
