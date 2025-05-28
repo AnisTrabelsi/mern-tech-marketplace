@@ -3,7 +3,7 @@
 ## Description
 Marketplace de matériel informatique full-stack (MongoDB, Express, React, Node.js).
 
-## Installation
+##  Installation
 
 ```bash
 # Cloner le repo
