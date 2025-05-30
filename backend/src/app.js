@@ -1,44 +1,37 @@
-// Import du framework Express pour créer l’API
 import express from 'express';
-
-// Import de CORS pour autoriser les requêtes cross-origin (entre domaines)
-import cors from 'cors';
-
-// Import de dotenv pour charger les variables d’environnement depuis un fichier .env
-import dotenv from 'dotenv';
-
-// Import de Mongoose pour interagir avec MongoDB
+import cors    from 'cors';
+import dotenv  from 'dotenv';
 import mongoose from 'mongoose';
 
-// Import des routes d’authentification
-import authRoutes from './routes/auth.js';
+import authRoutes    from './routes/auth.js';
+import productRoutes from './routes/product.js';
+import cartRoutes    from './routes/cart.js';
+import orderRoutes   from './routes/order.js';
+import stripeRoutes  from './routes/stripe.js';
 
-// Chargement des variables d’environnement (MONGO_URI, JWT_SECRET, etc.)
 dotenv.config();
 
-// Connexion à MongoDB via Mongoose
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,    // utilise le nouvel analyseur d’URL
-    useUnifiedTopology: true, // utilise le nouveau moteur de monitoring
-  })
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✔ MongoDB connected'))
-  .catch(err => console.error('✖ MongoDB connection error:', err));
+  .catch(err => console.error('✖ MongoDB error:', err));
 
-// Création de l’application Express
 const app = express();
 
-// Activation du middleware CORS pour toutes les routes
+// Permet les requêtes arrivant de http://localhost:3000
 app.use(cors());
 
-// Activation du parsing automatique du JSON dans le corps des requêtes
+// Sert le dossier `uploads/` pour accéder aux images
+app.use('/uploads', express.static('uploads'));
+
+// Parse le JSON pour les routes sans fichier
 app.use(express.json());
 
-// Définition d’un endpoint GET /api/status qui retourne un simple objet JSON { status: 'OK' }
-app.get('/api/status', (req, res) => res.json({ status: 'OK' }));
+// Routes
+app.use('/api/auth',    authRoutes);
+// Multer (multipart/form-data) est géré dans productRoutes via upload middleware
+app.use('/api/products', productRoutes);
+app.use('/api/cart',     cartRoutes);
+app.use('/api/orders',   orderRoutes);
+app.use('/api/stripe',   stripeRoutes);
 
-// Montée des routes d’authentification sous /api/auth
-app.use('/api/auth', authRoutes);
-
-// Export de l’application pour l’utiliser dans index.js (point d’entrée)
 export default app;

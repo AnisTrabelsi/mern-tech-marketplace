@@ -27,6 +27,14 @@ export default function HomePage() {
           S’inscrire
         </Link>
       </div>
+      <div className="mt-8 flex gap-4">
+        <Link to="/products" className="text-blue-600 hover:underline">
+          Voir le catalogue
+        </Link>
+        <Link to="/admin/products/new" className="text-purple-600 hover:underline">
+          Ajouter un produit
+        </Link>
+      </div>
     </motion.div>
   );
 }

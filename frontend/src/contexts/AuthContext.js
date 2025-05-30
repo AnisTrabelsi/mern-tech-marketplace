@@ -24,11 +24,14 @@ export function AuthProvider({ children }) {
       // Configure l'en-tête Authorization par défaut pour toutes les requêtes Axios
       api.defaults.headers.common.Authorization = `Bearer ${token}`;
       // Optionnel : ici, on pourrait appeler api.get('/auth/me') pour récupérer user
+      api.get('/auth/me').then(res => setUser(res.data));
+
     } else {
       // Si pas de token, on le retire du localStorage
       localStorage.removeItem('token');
       // Et on supprime l'en-tête Authorization de la configuration Axios
       delete api.defaults.headers.common.Authorization;
+       setUser(null);
     }
   }, [token]); // Ne se réexécute que lorsque le token change
 
