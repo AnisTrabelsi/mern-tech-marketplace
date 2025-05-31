@@ -8,7 +8,7 @@ import productRoutes from './routes/product.js';
 import cartRoutes    from './routes/cart.js';
 import orderRoutes   from './routes/order.js';
 import stripeRoutes  from './routes/stripe.js';
-
+import aiRoutes      from './routes/ai.js';
 dotenv.config();
 
 mongoose.connect(process.env.MONGO_URI)
@@ -33,5 +33,5 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart',     cartRoutes);
 app.use('/api/orders',   orderRoutes);
 app.use('/api/stripe',   stripeRoutes);
-
+app.use('/api/ai',      aiRoutes);
 export default app;

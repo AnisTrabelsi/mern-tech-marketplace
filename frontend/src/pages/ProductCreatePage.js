@@ -1,8 +1,9 @@
-// src/pages/ProductCreatePage.js
+// frontend/src/pages/ProductCreatePage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import { motion } from 'framer-motion';
+import AIDescriptionButton from '../components/AIDescriptionButton';
 
 export default function ProductCreatePage() {
   const navigate = useNavigate();
@@ -16,16 +17,17 @@ export default function ProductCreatePage() {
   const [image, setImage] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleChange = e =>
+  // Gérer la mise à jour d'un champ texte
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleFile = e => {
+  const handleFile = (e) => {
     if (e.target.files && e.target.files[0]) {
       setImage(e.target.files[0]);
     }
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const data = new FormData();
@@ -35,7 +37,6 @@ export default function ProductCreatePage() {
       if (image) {
         data.append('image', image);
       }
-      // Laisser Axios définir automatiquement le Content-Type (avec boundary)
       await api.post('/products', data);
       navigate('/products');
     } catch (err) {
@@ -59,9 +60,7 @@ export default function ProductCreatePage() {
 
         {/* Champ image */}
         <div>
-          <label className="block text-gray-700 mb-1">
-            Image du produit
-          </label>
+          <label className="block text-gray-700 mb-1">Image du produit</label>
           <input
             type="file"
             accept="image/*"
@@ -70,6 +69,7 @@ export default function ProductCreatePage() {
           />
         </div>
 
+        {/* Nom du produit */}
         <input
           name="name"
           placeholder="Nom"
@@ -78,13 +78,35 @@ export default function ProductCreatePage() {
           className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-purple-400"
           required
         />
-        <textarea
-          name="description"
-          placeholder="Description"
-          value={form.description}
-          onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-purple-400"
-        />
+
+        {/* Description + bouton IA */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label
+              htmlFor="description"
+              className="block text-gray-700 font-medium"
+            >
+              Description
+            </label>
+            {/* On n'affiche le bouton IA que si on a déjà un titre non vide */}
+            <AIDescriptionButton
+              title={form.name}
+              setDesc={(desc) =>
+                setForm((prev) => ({ ...prev, description: desc }))
+              }
+            />
+          </div>
+          <textarea
+            id="description"
+            name="description"
+            placeholder="Description"
+            value={form.description}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-purple-400"
+          />
+        </div>
+
+        {/* Prix et stock */}
         <div className="flex gap-4">
           <input
             name="price"
@@ -105,6 +127,8 @@ export default function ProductCreatePage() {
             required
           />
         </div>
+
+        {/* Catégorie */}
         <input
           name="category"
           placeholder="Catégorie"
@@ -112,6 +136,8 @@ export default function ProductCreatePage() {
           onChange={handleChange}
           className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-purple-400"
         />
+
+        {/* Bouton de création */}
         <button
           type="submit"
           className="w-full py-2 bg-purple-600 text-white font-semibold rounded-2xl hover:bg-purple-700 transition"

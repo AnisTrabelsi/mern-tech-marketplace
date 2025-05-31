@@ -5,9 +5,9 @@ import { CartContext } from '../contexts/CartContext';
 
 export default function ProductDetailPage() {
   const { id } = useParams();
-  const [prod, setProd]      = useState(null);
-  const [error, setError]    = useState(null);
-  const { updateCart }       = useContext(CartContext);
+  const [prod, setProd] = useState(null);
+  const [error, setError] = useState(null);
+  const { updateCart } = useContext(CartContext);
 
   useEffect(() => {
     api.get(`/products/${id}`)
@@ -16,7 +16,7 @@ export default function ProductDetailPage() {
   }, [id]);
 
   if (error) return <p className="text-red-500">{error}</p>;
-  if (!prod)  return <p>Chargement…</p>;
+  if (!prod) return <p>Chargement…</p>;
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -26,7 +26,6 @@ export default function ProductDetailPage() {
       <p className="text-xl text-green-600">{prod.price.toFixed(2)} €</p>
       <p>{prod.description}</p>
 
-      {/* Bouton Ajouter au panier */}
       <button
         onClick={() => updateCart(prod._id, 1)}
         className="px-6 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition"
